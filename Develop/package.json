@@ -7,7 +7,7 @@
     "start:dev": "",
     "start": "",
     "server": "",
-    "build": "",
+    "build": "webpack --mode production",
     "install": "",
     "client": ""
   },

@@ -18,12 +18,52 @@ module.exports = () => {
       path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
-      
+      new HtmlWebpackPlugin({
+        template: './src/index.html',
+        filename: 'index.html', // Output HTML file
+        chunks: ['main'] // Inject only 'main' bundle into this HTML file
+      }),
+      new HtmlWebpackPlugin({
+        template: './src/install.html',
+        filename: 'install.html', // Output HTML file
+        chunks: ['install'] // Inject only 'install' bundle into this HTML file
+      }),
+      new WebpackPwaManifest({
+        name: 'Just Another Text Editor',
+        short_name: 'J.A.T.E.',
+        description: 'Create notes with or without an internet connection',
+        background_color: '#ffffff',
+        theme_color: '#ffffff',
+        icons: [
+          {
+            src: path.resolve('src/images/logo.png'),
+            sizes: [96, 128, 192, 256, 384, 512],
+            destination: path.join("assets", "icons"),
+          }
+        ]
+      }),
+      new InjectManifest({
+        swSrc: './src/sw.js', // Path to service worker file
+        swDest: 'service-worker.js', // Output file for the service worker
+      })
     ],
 
-    module: {
+    mmodule: {
       rules: [
-        
+        {
+          test: /\.css$/,
+          use: ['style-loader', 'css-loader'] // Use style-loader and css-loader for handling CSS files
+        },
+        {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env']
+            }
+          }
+        }
       ],
     },
   };
