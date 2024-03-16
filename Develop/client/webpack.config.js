@@ -23,11 +23,7 @@ module.exports = () => {
         filename: 'index.html', // Output HTML file
         chunks: ['main'] // Inject only 'main' bundle into this HTML file
       }),
-      new HtmlWebpackPlugin({
-        template: './src/install.html',
-        filename: 'install.html', // Output HTML file
-        chunks: ['install'] // Inject only 'install' bundle into this HTML file
-      }),
+      
       new WebpackPwaManifest({
         name: 'Just Another Text Editor',
         short_name: 'J.A.T.E.',
@@ -51,16 +47,22 @@ module.exports = () => {
     mmodule: {
       rules: [
         {
-          test: /\.css$/,
+          test: /\.css$/i,
           use: ['style-loader', 'css-loader'] // Use style-loader and css-loader for handling CSS files
         },
         {
-          test: /\.js$/,
+          test: /\m?.js$/,
           exclude: /node_modules/,
           use: {
             loader: 'babel-loader',
             options: {
-              presets: ['@babel/preset-env']
+              presets: ['@babel/preset-env'],
+              plugins: [
+								"@babel/plugin-proposal-object-rest-spread",
+								"@babel/transform-runtime",
+                ['@babel/preset-env', { targets: "defaults" }]
+
+              ],
             }
           }
         }
